@@ -9,7 +9,8 @@ class AddVote extends React.Component{
         this.state = {
             paramName:"",
             name:"",
-            options:[]
+            options:[],
+            error:""
         }
     }
 
@@ -17,8 +18,21 @@ class AddVote extends React.Component{
     onSubmit = (event) =>{
         event.preventDefault();
 
+            this.setState({
+                error:""
+            })
+         
+        if(this.state.name.length ===0){
+            this.setState({
+                error:"Please type pool name"
+            })
+            return;
+        }
+
         if(this.state.options.length===0){
-            console.log("options are empty")
+            this.setState({
+                error:"Please type minimum one option to your pool"
+            })
             return;
         }
 
@@ -49,11 +63,21 @@ class AddVote extends React.Component{
 
     addOption = () =>{
        
+        this.setState({
+            error:""
+        })
+
         if(!this.state.paramName || this.state.paramName.length ===0){
+            this.setState({
+                error:"Please type parameter name"
+            })
             return;
         }
      
        if(this.state.options.findIndex(x=>x.name.toUpperCase() === this.state.paramName.toUpperCase() ) >-1){
+        this.setState({
+            error:"This parameter already exist on your list"
+        })
            return;
        }
 
@@ -83,6 +107,13 @@ class AddVote extends React.Component{
         return(
             <React.Fragment>
           <div className="container">
+            {
+                this.state.error.length > 0 && 
+                            <div class="alert alert-danger" role="alert">  {this.state.error} </div>
+            }
+
+
+
             <div className="row">
               <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
                 <div className="card card-signin my-5">
